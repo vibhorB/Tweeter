@@ -5,7 +5,7 @@
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         myapp:showAsAction="ifRoom"
-        android:icon="@drawable/twitter_compose"
+        android:icon="@drawable/ic_action_composetweet"
         android:title="@string/compose"/>
     
     <item

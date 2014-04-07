@@ -1,0 +1,28 @@
+<resources>
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+        
+        <item name="actionBarStyle">@style/MyActionBar</item>
+    </style>
+    
+    <style name="MyActionBar" parent="@style/Widget.AppCompat.ActionBar">
+        <item name="android:background">#00aced</item>
+    	<item name="android:actionMenuTextColor">@color/White</item>
+    </style>
+    
+ 
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- Support library compatibility -->
+        
+    </style>
+</resources>

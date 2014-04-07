@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" 
+    xmlns:myapp="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        myapp:showAsAction="ifRoom"
+        android:icon="@drawable/twitter_compose"
+        android:title="@string/compose"/>
+    
+    <item
+        android:id="@+id/action_profile"
+        android:orderInCategory="100"
+        myapp:showAsAction="ifRoom"
+        android:icon="@drawable/ic_profile"
+        android:title="@string/profile"/>
+    
+    <item android:id="@+id/action_search"
+          android:title="@string/search"
+          android:icon="@drawable/ic_search"
+          myapp:showAsAction="ifRoom|collapseActionView"
+          myapp:actionViewClass="android.support.v7.widget.SearchView" ></item>
+
+</menu>

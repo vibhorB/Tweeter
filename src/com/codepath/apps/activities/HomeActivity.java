@@ -47,7 +47,7 @@ public class HomeActivity extends ActionBarActivity {
 		Tab tab1 = actionBar
 		    .newTab()
 		    .setText("Home")
-		    .setIcon(R.drawable.ic_home_tab)
+		    .setIcon(R.drawable.home_1)
 		    .setTag("HomeTimelineFragment")
 		    .setTabListener(new SupportFragmentTabListener<HomeTimelineFragment>(R.id.flTweetContainer, this,
                         "home", HomeTimelineFragment.class));
@@ -58,7 +58,7 @@ public class HomeActivity extends ActionBarActivity {
 		Tab tab2 = actionBar
 		    .newTab()
 		    .setText("Mentions")
-		    .setIcon(R.drawable.ic_mention_tab)
+		    .setIcon(R.drawable.mention_1)
 		    .setTag("MentionsTimelineFragment")
 		    .setTabListener(new SupportFragmentTabListener<MentionsTimelineFragment>(R.id.flTweetContainer, this,
                         "mentions", MentionsTimelineFragment.class));

@@ -95,7 +95,7 @@ public class UserDetailActivity extends FragmentActivity {
 			
 			@Override
 			public void onClick(View v) {
-				launchUsersListActivity("Follower");
+				launchUsersListActivity("Followers");
 				
 			}
 		});

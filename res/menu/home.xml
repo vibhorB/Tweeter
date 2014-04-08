@@ -5,7 +5,7 @@
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         myapp:showAsAction="ifRoom"
-        android:icon="@drawable/ic_action_composetweet"
+        android:icon="@drawable/composetweet"
         android:title="@string/compose"/>
     
     <item
@@ -17,7 +17,7 @@
     
     <item android:id="@+id/action_search"
           android:title="@string/search"
-          android:icon="@drawable/ic_search"
+          android:icon="@drawable/search"
           myapp:showAsAction="ifRoom|collapseActionView"
           myapp:actionViewClass="android.support.v7.widget.SearchView" ></item>
 

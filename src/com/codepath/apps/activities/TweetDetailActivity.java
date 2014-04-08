@@ -38,6 +38,7 @@ public class TweetDetailActivity extends Activity {
 	private TextView tvTwtDetName;
 	private TextView tvTwtDetScreen;
 	private TextView tvTwtDetContent;
+	private ImageView ivMedia;
 	private TextView tvTwtDetTime;
 	private TextView tvTwtDetRTCount;
 	private TextView tvTwtDetFavCount;
@@ -74,6 +75,9 @@ public class TweetDetailActivity extends Activity {
 		tvTwtDetName.setText(tweet.getName());
 		tvTwtDetScreen.setText(tweet.getHandle());
 		tvTwtDetContent.setText(tweet.getContent());
+		if(tweet.getMediaUrl() != null && tweet.getMediaUrl().length() > 0){
+			Picasso.with(this).load(tweet.getMediaUrl()).into(ivMedia);
+		}
 		tvTwtDetTime.setText(getWhenCreated(tweet.getCreatedAt()));
 		
 		tvTwtDetFavCount.setText(""+tweet.getFavourites_count()+" ");
@@ -231,6 +235,7 @@ public class TweetDetailActivity extends Activity {
 		tvTwtDetName = (TextView) findViewById(R.id.tvTwtDetName);
 		tvTwtDetScreen = (TextView) findViewById(R.id.tvTwtDetScreen);
 		tvTwtDetContent = (TextView) findViewById(R.id.tvTwtDetContent);
+		ivMedia = (ImageView) findViewById(R.id.ivMedia);
 		tvTwtDetTime = (TextView) findViewById(R.id.tvTwtDetTime);
 		tvTwtDetRTCount = (TextView) findViewById(R.id.tvRetweetC);
 		tvTwtDetFavCount = (TextView) findViewById(R.id.tvTwtDetFav);

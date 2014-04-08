@@ -44,13 +44,20 @@
         android:autoLink="web"
         android:singleLine="false"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+   
+   <ImageView
+   		android:id="@+id/ivMedia"
+   		android:layout_width="wrap_content"
+   		android:layout_height="wrap_content" 
+   		android:layout_alignLeft="@+id/ivTwtDetPic"
+   		android:layout_below="@+id/tvTwtDetContent"></ImageView>
 
     <TextView
         android:id="@+id/tvTwtDetTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tvTwtDetContent"
-        android:layout_below="@+id/tvTwtDetContent"
+        android:layout_below="@+id/ivMedia"
         android:layout_marginTop="20dp"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 

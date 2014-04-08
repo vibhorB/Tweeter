@@ -34,7 +34,7 @@ public class Tweet extends Model implements Serializable{
 	@Column(name = "createdAt")
 	private String createdAt;
 	
-	 @Column(name = "tweet_id", unique = true)
+	 @Column(name = "tweet_id")
 	private long tweetId;
 	 @Column(name = "retweet_count")
 	 private int retweet_count;
@@ -42,7 +42,10 @@ public class Tweet extends Model implements Serializable{
 	 private int favourites_count;
 	 @Column(name = "favorited")
 	 private boolean favorited;
+	 @Column(name = "retweeted")
 	 private boolean retweeted;
+	 @Column(name = "mediaUrl")
+	 private String mediaUrl;
 	 
 	 public Tweet(){
 		 super();
@@ -121,6 +124,7 @@ public class Tweet extends Model implements Serializable{
 	            t.favourites_count = jsonObject.getInt("favorite_count");
 	            t.favorited = jsonObject.getBoolean("favorited");
 	            t.retweeted = jsonObject.getBoolean("retweeted");
+	            t.mediaUrl = setMediaUrlIfAvailable(jsonObject);
 	        } catch (JSONException e) {
 	            e.printStackTrace();
 	            return null;
@@ -129,6 +133,23 @@ public class Tweet extends Model implements Serializable{
 	        return t;
 	}
 	
+	private static String setMediaUrlIfAvailable(JSONObject jsonObject) {
+		//extract entities
+		String mediaUrl = null;
+		try {
+			JSONObject entities = jsonObject.getJSONObject("entities");
+			JSONArray media = entities.getJSONArray("media");
+			JSONObject first = media.getJSONObject(0);
+			String mediaURl = first.getString("media_url");
+			if(mediaURl != null && mediaURl.trim().length() > 0){
+				mediaUrl = mediaURl.trim();
+			}
+		} catch (JSONException e) {
+			mediaUrl = null;
+			e.printStackTrace();
+		}
+		return mediaUrl;
+	}
 	public static ArrayList<Tweet> fromJSON(JSONArray jsonArray){
 		ArrayList<Tweet> tweets = new ArrayList<Tweet>(jsonArray.length());
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -155,7 +176,17 @@ public class Tweet extends Model implements Serializable{
           .execute();
     }
 	
+	public static Tweet get(long tweetId){
+		return (Tweet) new Select().from(Tweet.class).where("tweet_id", tweetId).execute();
+	}
+	
 	public static void deleteAll(){
 		new Delete().from(Tweet.class).execute();
+	}
+	public String getMediaUrl() {
+		return mediaUrl;
+	}
+	public void setMediaUrl(String mediaUrl) {
+		this.mediaUrl = mediaUrl;
 	}
 }

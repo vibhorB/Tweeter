@@ -5,7 +5,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.json.JSONObject;
+
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -17,17 +21,28 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codepath.apps.DataModel.Tweet;
+import com.codepath.apps.restclient.TwitterClient;
 import com.codepath.apps.restclienttemplate.R;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.image.SmartImageView;
 import com.squareup.picasso.Picasso;
 
 
 public class TwitterHomeFeedAdapter extends ArrayAdapter<Tweet>{
 
+//	private Button btRetweet;
+//	private Button btFav;
+//	private Button btReply;
+//	private Tweet tweet;
+	private TwitterClient client = new TwitterClient(getContext());
+	
 	public TwitterHomeFeedAdapter(Context context, ArrayList<Tweet> tweets){
 		super(context, 0, tweets);
 	}
@@ -35,6 +50,7 @@ public class TwitterHomeFeedAdapter extends ArrayAdapter<Tweet>{
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent){
 		Tweet tweet = this.getItem(position);
+		//tweet = Tweet.get(tweetId);
 		if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.item_tweet, null);
@@ -45,12 +61,30 @@ public class TwitterHomeFeedAdapter extends ArrayAdapter<Tweet>{
         TextView tvHandle = (TextView) convertView.findViewById(R.id.tvHandle);
         TextView tvContent = (TextView) convertView.findViewById(R.id.tvContent);
         ImageView ivPosterImage = (ImageView) convertView.findViewById(R.id.ivPosterImage);
+        SmartImageView ivMedia = (SmartImageView) convertView.findViewById(R.id.ivMedia);
         TextView tvWhen = (TextView) convertView.findViewById(R.id.tvWhen);
+        Button btRetweet = (Button) convertView.findViewById(R.id.btRetweet);
+        Button btReply = (Button) convertView.findViewById(R.id.btReply);
+        Button btFav = (Button) convertView.findViewById(R.id.btFav);
         // Populate the data into the template view using the data object
         tvName.setText(tweet.getName());
         tvHandle.setText(tweet.getHandle());
         tvContent.setText(tweet.getContent());
         Picasso.with(getContext()).load(tweet.getImageUrl()).into(ivPosterImage);
+        setRetweetedIcon(btRetweet, tweet.isRetweeted());
+        setFavoritedIcon(btFav, tweet.isFavorited());
+        setUpActionButtons(btReply, btRetweet, btFav, tweet);
+        if(tweet.getRetweet_count() > 0){
+        	btRetweet.setText(" "+tweet.getRetweet_count());
+        }
+        if(tweet.getFavourites_count() > 0){
+        	btFav.setText(" "+tweet.getFavourites_count());
+        }
+        
+        if(tweet.getMediaUrl() != null && tweet.getMediaUrl().length() > 0){
+        	//Picasso.with(getContext()).load(tweet.getMediaUrl()).into(ivMedia);
+        	//ivMedia.setImageUrl(tweet.getMediaUrl());
+        }
         //scaleImage(ivPosterImage, 200);
         // Return the completed view to render on screen
         tvWhen.setText(getWhenCreated(tweet.getCreatedAt()));
@@ -58,6 +92,129 @@ public class TwitterHomeFeedAdapter extends ArrayAdapter<Tweet>{
         setUpItemClickListener(convertView, tweet);
         
         return convertView;
+	}
+	
+	private void setUpActionButtons(Button btReply, final Button btRetweet,final Button btFav, final Tweet twt) {
+//		btReply.setTag(tweet.getTweetId());
+//		btRetweet.setTag(tweet.getTweetId());
+//		btFav.setTag(tweet.getTweetId());
+		btReply.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				startTweetActivity(twt);	
+			}
+		});
+		
+		btRetweet.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				confirmRetweet(btRetweet, twt);
+			}
+		});
+		
+		btFav.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				postFavorite(btFav, twt);
+			}
+		});
+	}
+	
+	private void startTweetActivity(Tweet tweet) {
+		Intent reply = new Intent(getContext(), TweetActivity.class);
+		reply.putExtra("purpose", "reply");
+		reply.putExtra("screen_name", tweet.getHandle());
+		reply.putExtra("id", tweet.getTweetId());
+		getContext().startActivity(reply);
+		
+	}
+	
+	protected void confirmRetweet(final Button btRetweet, final Tweet tweet) {
+		AlertDialog.Builder b = new AlertDialog.Builder(getContext());
+	    b.setTitle("Retweet this to your followers?");
+	    b.setPositiveButton("Retweet", new DialogInterface.OnClickListener()
+	    {
+	        @Override
+	        public void onClick(DialogInterface dialog, int whichButton)
+	        {
+	        	if(!tweet.isRetweeted()){
+		        	retweet(btRetweet, tweet);
+	        	}else{
+	        		Toast.makeText(getContext(), "Already retweeted", Toast.LENGTH_SHORT).show();
+	        	}
+	        }
+	    });
+	    b.setNegativeButton("Cancel", null);
+	    b.create().show();
+	 }
+	
+	protected void postFavorite(final Button btFav, final Tweet tweet) {
+
+		client.postFavoriteChange(tweet.isFavorited(), String.valueOf(tweet.getTweetId()), new JsonHttpResponseHandler() {
+			@Override
+			public void onSuccess(JSONObject body) {
+				//finishActivity();
+				if(!tweet.isFavorited()){
+					tweet.setFavorited(true);
+					setFavoritedIcon(btFav, true);
+				}else{
+					tweet.setFavorited(false);
+					setFavoritedIcon(btFav, false);
+				}
+				// ComposeTweetActivity.this.finish();
+				super.onSuccess(body);
+			}
+
+			public void onFailure(Throwable e, JSONObject error) {
+				// Handle the failure and alert the user to retry
+				Toast.makeText(getContext(),
+						"Excepton : " + e.getLocalizedMessage(),
+						Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+	
+	private void retweet(final Button btRetweet, final Tweet tweet) {
+		
+		if(!tweet.isRetweeted()){
+			client.retweet(String.valueOf(tweet.getTweetId()), new JsonHttpResponseHandler() {
+				@Override
+				public void onSuccess(JSONObject body) {
+					
+						tweet.setRetweeted(true);
+						setRetweetedIcon(btRetweet, true);
+					// ComposeTweetActivity.this.finish();
+					super.onSuccess(body);
+				}
+
+				public void onFailure(Throwable e, JSONObject error) {
+					// Handle the failure and alert the user to retry
+					Toast.makeText(getContext(),
+							"Excepton : " + e.getLocalizedMessage(),
+							Toast.LENGTH_SHORT).show();
+				}
+			});
+		}	
+	}
+	
+	private void setRetweetedIcon(Button btRetweet, boolean isRetweeted){
+		if(isRetweeted){
+			btRetweet.setCompoundDrawablesWithIntrinsicBounds(R.drawable.retweet_done_24, 0, 0, 0);
+		}else{
+			btRetweet.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_retweet, 0, 0, 0);
+		}
+	}
+	
+	private void setFavoritedIcon(Button btFav, boolean isFavorited){
+		if(isFavorited){
+			btFav.setCompoundDrawablesWithIntrinsicBounds(R.drawable.fav_done_24_red, 0, 0, 0);
+		}else{
+			btFav.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_fav, 0, 0, 0);
+		}
 	}
 	
 	private void setUpItemClickListener(View v, final Tweet clicked){

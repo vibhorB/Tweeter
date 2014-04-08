@@ -41,7 +41,9 @@ public class UserListFragment extends Fragment{
 			Bundle savedInstanceState) {
 		 userId = getArguments().getString("userId");
 		 useCase = getArguments().getString("useCase");
-		return inflater.inflate(R.layout.fragment_user_list, parent, false);
+		View v =  inflater.inflate(R.layout.fragment_user_list, parent, false);
+		lvUsers = (PullToRefreshListView) v.findViewById(R.id.lvUsers);
+		return v;
 	}
 	 
 	@Override
@@ -50,7 +52,6 @@ public class UserListFragment extends Fragment{
 		super.onActivityCreated(savedInstanceState);
 		context = getActivity();
 		client = new TwitterClient(context);
-		lvUsers = (PullToRefreshListView) getActivity().findViewById(R.id.lvUsers);
 		setUsersListView();
 		setUpListViewListeners();
 		
@@ -59,14 +60,10 @@ public class UserListFragment extends Fragment{
 	
 	private void startAPICall() {
 		if(TwitterUtils.isNetworkAvailable(context)){
-			//clear DB so that only new tweets are saved
-			//Tweet.deleteAll();
 	        fetchUsersListBasedOnUseCase(1);
 		}else{
 			Toast.makeText(context, "No network connectivity", Toast.LENGTH_SHORT).show();
-			//load from DB
 			resetAdapter();
-			//getAdapter().addAll(Tweet.getAll());
 			getListView().onRefreshComplete();
 			hideProgressBar();
 		}
@@ -76,7 +73,7 @@ public class UserListFragment extends Fragment{
 	private void fetchUsersListBasedOnUseCase(final int page) {
 		if(useCase.equals("Following")){
 			fetchFollowingUsers(page);
-		}else if(useCase.equals("Follower")){
+		}else if(useCase.equals("Followers")){
 			fetchFollowers(page);
 		}
 	}

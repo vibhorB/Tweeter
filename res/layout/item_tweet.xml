@@ -64,5 +64,47 @@
         android:paddingLeft="10dp"
         android:text="@string/perc"
         android:textAppearance="?android:attr/textAppearanceSmall" />
+    
+    <TableLayout
+		    android:layout_below="@+id/tvContent"
+        android:stretchColumns="*"
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:id="@+id/actions_table" >
+
+        <TableRow
+            android:id="@+id/tableRow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/btReply"
+                style="@style/CellIconButton"
+                android:layout_weight="1"
+                android:drawableLeft="@drawable/ic_reply"/>
+
+            <Button
+                android:id="@+id/btRetweet"
+                style="@style/CellIconButton"
+                android:drawableLeft="@drawable/ic_retweet"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/btFav"
+                android:drawableLeft="@drawable/ic_fav"
+                style="@style/CellIconButton"
+                android:layout_weight="1"/>
+
+        </TableRow>
+        
+    </TableLayout>
+
+    <com.loopj.android.image.SmartImageView
+        android:id="@+id/ivMedia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvContent"
+        android:layout_below="@+id/actions_table"
+        android:layout_marginTop="5dp"/>
 
 </RelativeLayout>

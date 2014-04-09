@@ -50,45 +50,48 @@ public class TwitterHomeFeedAdapter extends ArrayAdapter<Tweet>{
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent){
 		Tweet tweet = this.getItem(position);
+		ViewHolder holder;
 		//tweet = Tweet.get(tweetId);
 		if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.item_tweet, null);
+            holder = new ViewHolder();
+            holder.tvName = (TextView) convertView.findViewById(R.id.tvName);
+            holder.tvHandle = (TextView) convertView.findViewById(R.id.tvHandle);
+            holder.tvContent = (TextView) convertView.findViewById(R.id.tvContent);
+            holder.ivPosterImage = (ImageView) convertView.findViewById(R.id.ivPosterImage);
+            holder.ivMedia = (SmartImageView) convertView.findViewById(R.id.ivMedia);
+            holder.tvWhen = (TextView) convertView.findViewById(R.id.tvWhen);
+            holder.btRetweet = (Button) convertView.findViewById(R.id.btRetweet);
+            holder.btReply = (Button) convertView.findViewById(R.id.btReply);
+            holder.btFav = (Button) convertView.findViewById(R.id.btFav);
+            convertView.setTag(holder);
         }
-		convertView.setTag(convertView.toString());
-        // Lookup views within item layout
-        TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
-        TextView tvHandle = (TextView) convertView.findViewById(R.id.tvHandle);
-        TextView tvContent = (TextView) convertView.findViewById(R.id.tvContent);
-        ImageView ivPosterImage = (ImageView) convertView.findViewById(R.id.ivPosterImage);
-        SmartImageView ivMedia = (SmartImageView) convertView.findViewById(R.id.ivMedia);
-        TextView tvWhen = (TextView) convertView.findViewById(R.id.tvWhen);
-        Button btRetweet = (Button) convertView.findViewById(R.id.btRetweet);
-        Button btReply = (Button) convertView.findViewById(R.id.btReply);
-        Button btFav = (Button) convertView.findViewById(R.id.btFav);
-        // Populate the data into the template view using the data object
-        tvName.setText(tweet.getName());
-        tvHandle.setText(tweet.getHandle());
-        tvContent.setText(tweet.getContent());
-        Picasso.with(getContext()).load(tweet.getImageUrl()).into(ivPosterImage);
-        setRetweetedIcon(btRetweet, tweet.isRetweeted());
-        setFavoritedIcon(btFav, tweet.isFavorited());
-        setUpActionButtons(btReply, btRetweet, btFav, tweet);
+        else 
+        {
+             holder=(ViewHolder) convertView.getTag();
+        }
+		
+        holder.tvName.setText(tweet.getName());
+        holder.tvHandle.setText(tweet.getHandle());
+        holder.tvContent.setText(tweet.getContent());
+        Picasso.with(getContext()).load(tweet.getImageUrl()).into(holder.ivPosterImage);
+        setRetweetedIcon(holder.btRetweet, tweet.isRetweeted());
+        setFavoritedIcon(holder.btFav, tweet.isFavorited());
+        setUpActionButtons(holder.btReply, holder.btRetweet, holder.btFav, tweet);
         if(tweet.getRetweet_count() > 0){
-        	btRetweet.setText(" "+tweet.getRetweet_count());
+        	holder.btRetweet.setText(" "+tweet.getRetweet_count());
         }
         if(tweet.getFavourites_count() > 0){
-        	btFav.setText(" "+tweet.getFavourites_count());
+        	holder.btFav.setText(" "+tweet.getFavourites_count());
         }
         
         if(tweet.getMediaUrl() != null && tweet.getMediaUrl().length() > 0){
         	//Picasso.with(getContext()).load(tweet.getMediaUrl()).into(ivMedia);
-        	//ivMedia.setImageUrl(tweet.getMediaUrl());
+        	//holder.ivMedia.setImageUrl(tweet.getMediaUrl());
         }
-        //scaleImage(ivPosterImage, 200);
-        // Return the completed view to render on screen
-        tvWhen.setText(getWhenCreated(tweet.getCreatedAt()));
-        setUpImageViewListener(ivPosterImage, tweet.getHandle());
+        holder.tvWhen.setText(getWhenCreated(tweet.getCreatedAt()));
+        setUpImageViewListener(holder.ivPosterImage, tweet.getHandle());
         setUpItemClickListener(convertView, tweet);
         
         return convertView;
@@ -329,4 +332,17 @@ public class TwitterHomeFeedAdapter extends ArrayAdapter<Tweet>{
 		return t1+t2;
 		//return "2h";
 	}
+	
+	 public static class ViewHolder
+	    {
+		 	TextView tvName;
+	        TextView tvHandle;
+	        TextView tvContent;
+	        ImageView ivPosterImage;
+	        SmartImageView ivMedia;
+	        TextView tvWhen;
+	        Button btRetweet;
+	        Button btReply;
+	        Button btFav;
+	    }
 }

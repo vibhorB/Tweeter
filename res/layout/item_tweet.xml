@@ -66,10 +66,11 @@
         android:textAppearance="?android:attr/textAppearanceSmall" />
     
     <TableLayout
-		    android:layout_below="@+id/tvContent"
+		android:layout_below="@+id/tvContent"
+		android:layout_alignLeft="@+id/tvContent"
         android:stretchColumns="*"
         android:layout_width="match_parent"
-        android:layout_height="28dp"
+        android:layout_height="25dp"
         android:id="@+id/actions_table" >
 
         <TableRow
@@ -79,20 +80,20 @@
 
             <Button
                 android:id="@+id/btReply"
-                style="@style/CellIconButton"
+                style="@style/IconButton"
                 android:layout_weight="1"
                 android:drawableLeft="@drawable/ic_reply"/>
 
             <Button
                 android:id="@+id/btRetweet"
-                style="@style/CellIconButton"
+                style="@style/IconButton"
                 android:drawableLeft="@drawable/ic_retweet"
                 android:layout_weight="1"/>
 
             <Button
                 android:id="@+id/btFav"
                 android:drawableLeft="@drawable/ic_fav"
-                style="@style/CellIconButton"
+                style="@style/IconButton"
                 android:layout_weight="1"/>
 
         </TableRow>
@@ -105,6 +106,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tvContent"
         android:layout_below="@+id/actions_table"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="5dp"
+        android:visibility="gone"/>
 
 </RelativeLayout>

@@ -77,7 +77,8 @@ public class UserDetailActivity extends FragmentActivity {
 			
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(context, "Clicked", Toast.LENGTH_SHORT).show();
+				launchUserTimeline();
+				//Toast.makeText(context, "Clicked", Toast.LENGTH_SHORT).show();
 				
 			}
 		});
@@ -99,6 +100,13 @@ public class UserDetailActivity extends FragmentActivity {
 				
 			}
 		});
+	}
+
+	protected void launchUserTimeline() {
+		Intent i = new Intent(UserDetailActivity.this, UserTweetActivity.class);
+		i.putExtra("screen_name", screenName);
+		startActivity(i);
+		
 	}
 
 	protected void launchUsersListActivity(String useCase) {
@@ -164,26 +172,30 @@ public class UserDetailActivity extends FragmentActivity {
 				  }
 				});
 		}else{
-			client.getUserProfile(screenName, new JsonHttpResponseHandler() { 
-				@Override
-			            public void onSuccess(int code, JSONObject json) {
-		            User currentUser = User.fromJson(json);
-		            setUpProfileHeader(currentUser);
-		            if(screenName == null || screenName.equals("")){
-		            	screenName = currentUser.getScreenName().substring(1);
-		            }
-		            initFragment();
-		            hideProgressBar();
-		            //setUpProfileInfo();
-				}
-				public void onFailure(Throwable e, JSONObject error) {
-				    // Handle the failure and alert the user to retry
-				   Toast.makeText(context, "Excepton : "+e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-		           hideProgressBar();
-				}
-				});
+			getUserTimeline();
 		}
 		
+	}
+
+	private void getUserTimeline() {
+		client.getUserProfile(screenName, new JsonHttpResponseHandler() { 
+			@Override
+		            public void onSuccess(int code, JSONObject json) {
+		        User currentUser = User.fromJson(json);
+		        setUpProfileHeader(currentUser);
+		        if(screenName == null || screenName.equals("")){
+		        	screenName = currentUser.getScreenName().substring(1);
+		        }
+		        initFragment();
+		        hideProgressBar();
+		        //setUpProfileInfo();
+			}
+			public void onFailure(Throwable e, JSONObject error) {
+			    // Handle the failure and alert the user to retry
+			   Toast.makeText(context, "Excepton : "+e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+		       hideProgressBar();
+			}
+			});
 	}
 	
 	protected void initFragment() {

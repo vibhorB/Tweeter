@@ -72,6 +72,14 @@
             android:name="com.codepath.apps.activities.UserListActivity"
             android:label="@string/title_activity_search_result" >
         </activity>
+        <activity
+            android:name="com.codepath.apps.activities.UserTweetsActivity"
+            android:label="@string/title_activity_user_tweets" >
+        </activity>
+        <activity
+            android:name="com.codepath.apps.activities.UserTweetActivity"
+            android:label="@string/title_activity_user_tweet" >
+        </activity>
     </application>
 
 </manifest>

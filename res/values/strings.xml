@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Tweet.ly</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
@@ -23,4 +24,7 @@
     <string name="follwers">FOLLOWERS</string>
     <string name="profile">Profile</string>
     <string name="search">Search</string>
+    <string name="title_activity_user_tweets">UserTweetsActivity</string>
+    <string name="title_activity_user_tweet">UserTweetActivity</string>
+
 </resources>

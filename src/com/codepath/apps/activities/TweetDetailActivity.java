@@ -76,6 +76,7 @@ public class TweetDetailActivity extends Activity {
 		tvTwtDetScreen.setText(tweet.getHandle());
 		tvTwtDetContent.setText(tweet.getContent());
 		if(tweet.getMediaUrl() != null && tweet.getMediaUrl().length() > 0){
+			ivMedia.setVisibility(View.VISIBLE);
 			Picasso.with(this).load(tweet.getMediaUrl()).into(ivMedia);
 		}
 		tvTwtDetTime.setText(getWhenCreated(tweet.getCreatedAt()));
@@ -179,7 +180,8 @@ public class TweetDetailActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				postTweet(etTwtDetRep.getText().toString());
+				tweet();
+				//postTweet(etTwtDetRep.getText().toString());
 				
 			}
 		});
@@ -292,7 +294,7 @@ public class TweetDetailActivity extends Activity {
 
 	private void tweet() {
 		String st = etTwtDetRep.getText().toString();
-		if (st == null || st.length() == 0 || st.equals("")) {
+		if (st == null || st.length() == 0 || st.equals("") || st.equals(tweet.getHandle())) {
 			Toast.makeText(TweetDetailActivity.this, "Write something to post",
 					Toast.LENGTH_LONG).show();
 		} else if (st.length() > 140) {

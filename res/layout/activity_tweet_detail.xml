@@ -1,4 +1,5 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout 
+     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -47,10 +48,11 @@
    
    <ImageView
    		android:id="@+id/ivMedia"
-   		android:layout_width="wrap_content"
-   		android:layout_height="wrap_content" 
+   		android:layout_width="120dp"
+   		android:layout_height="120dp"
    		android:layout_alignLeft="@+id/ivTwtDetPic"
-   		android:layout_below="@+id/tvTwtDetContent"></ImageView>
+   		android:layout_below="@+id/tvTwtDetContent"
+   		android:visibility="gone"></ImageView>
 
     <TextView
         android:id="@+id/tvTwtDetTime"
@@ -58,7 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tvTwtDetContent"
         android:layout_below="@+id/ivMedia"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
@@ -90,43 +92,47 @@
         android:layout_marginTop="20dp"
         android:background="#d3d3d3" />
 
-    <ImageButton
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/ivBar2"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:weightSum="4" >
+        
+        <ImageButton
         android:id="@+id/ibTwtDetReply"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ivBar2"
-        android:layout_marginTop="18dp"
         android:background="@null"
-        android:src="@drawable/ic_reply" />
+        android:src="@drawable/ic_reply"
+        android:layout_weight="1" />
 
-    <ImageButton
+    	<ImageButton
         android:id="@+id/ibTwtDetRT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/ibTwtDetReply"
-        android:layout_marginLeft="70dp"
-        android:layout_toRightOf="@+id/ibTwtDetReply"
-        android:background="@null" />
+        android:background="@null"
+        android:layout_weight="1" />
 
-    <ImageButton
+    	<ImageButton
         android:id="@+id/ibTwtDetFav"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/ibTwtDetReply"
-        android:layout_marginLeft="70dp"
-        android:layout_toRightOf="@+id/ibTwtDetRT"
-        android:background="@null"/>
+        android:background="@null"
+        android:layout_weight="1"/>
     
-    <ImageButton
+    	<ImageButton
         android:id="@+id/ibTwtDetShare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/ibTwtDetReply"
-        android:layout_marginLeft="70dp"
-        android:layout_toRightOf="@+id/ibTwtDetFav"
-        android:layout_alignParentRight="true"
         android:background="@null"
-        android:src="@drawable/ic_share" />
+        android:src="@drawable/ic_share"
+        android:layout_weight="1" />
+        
+    </LinearLayout>
+    
 
     <View
         android:id="@+id/view3"
